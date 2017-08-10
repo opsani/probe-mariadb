@@ -1,4 +1,5 @@
 # probe-mariadb
+
 The mariadb probe connects to mariadb/mysql component instances and lists their databases.  This probe can be used to verify a deployed service provides access to the mariadb/mysql API on the component's service network (the same network which is used to consume that service).
 
 The mariadb probe supports the following actions:
@@ -14,6 +15,8 @@ These actions support the following arguments:
 * `database` - database (default `None`)
 * `timeout` - operation timeout *per service instance*, in seconds (default `30`).  This is how long to keep retrying if the mariadb service does not respond.
 
+Docker Hub repository:  <https://hub.docker.com/r/opsani/probe-mariadb/>
+
 ## examples
 
 Here are a few examples in the form of quality gates specified in a Skopos TED file (target environment descriptor).  Quality gates associate probe executions to one or more component images.  During application deployment Skopos executes the specified probes to assess components deployed with matching images.
@@ -26,20 +29,20 @@ quality_gates:
         steps:
 
             # verify mariadb service is up (default action service_up)
-            - probe: opsani/probe-mariadb:v1
+            - probe: opsani/probe-mariadb
 
             # verify mariadb access
             - probe:
-                image: opsani/probe-mariadb:v1
+                image: opsani/probe-mariadb
                 action: check_access
                 label: "check mariadb access on alternate port with timeout"
                 arguments: { port: 10000, timeout: 15 }
             - probe:
-                image: opsani/probe-mariadb:v1
+                image: opsani/probe-mariadb
                 action: check_access
                 label: "check mariadb access with user/password/database"
                 arguments:
-                    user: "my_user"
-                    password: "my_password"
-                    database: "my_database"
+                    user: my_user
+                    password: ${my_password}
+                    database: my_database
 ```
